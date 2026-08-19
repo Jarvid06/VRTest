@@ -92,7 +92,39 @@ body {
 		</style>
 		<link id="-gd-engine-icon" rel="icon" type="image/png" href="IphoneVR.icon.png" />
 <link rel="apple-touch-icon" href="IphoneVR.apple-touch-icon.png"/>
+<script>
+      // Global object to store orientation values so Godot can read them
+      window.deviceOrientationData = {
+        alpha: 0,
+        beta: 0,
+        gamma: 0,
+        granted: false
+      };
 
+      function requestiOSOrientationPermission() {
+        if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
+          DeviceOrientationEvent.requestPermission()
+            .then(permissionState => {
+              if (permissionState === 'granted') {
+                window.deviceOrientationData.granted = true;
+                window.addEventListener('deviceorientation', handleOrientation);
+              } else {
+                alert('Permission to access device orientation was denied.');
+              }
+            })
+            .catch(console.error);
+        } else {
+          window.deviceOrientationData.granted = true;
+          window.addEventListener('deviceorientation', handleOrientation);
+        }
+      }
+
+      function handleOrientation(event) {
+        window.deviceOrientationData.alpha = event.alpha || 0;
+        window.deviceOrientationData.beta = event.beta || 0;
+        window.deviceOrientationData.gamma = event.gamma || 0;
+      }
+    </script>
 	</head>
 	<body>
 		<canvas id="canvas">
@@ -111,7 +143,7 @@ body {
 
 		<script src="IphoneVR.js"></script>
 		<script>
-const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"IphoneVR","experimentalVK":false,"fileSizes":{"IphoneVR.pck":14580,"IphoneVR.wasm":35740641},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
+const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"IphoneVR","experimentalVK":false,"fileSizes":{"IphoneVR.pck":14308,"IphoneVR.wasm":35740641},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
 const GODOT_THREADS_ENABLED = false;
 const engine = new Engine(GODOT_CONFIG);
 
