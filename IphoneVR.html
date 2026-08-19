@@ -92,6 +92,45 @@ body {
 		</style>
 		<link id="-gd-engine-icon" rel="icon" type="image/png" href="IphoneVR.icon.png" />
 <link rel="apple-touch-icon" href="IphoneVR.apple-touch-icon.png"/>
+<style>
+  /* Ensure canvas fills the screen completely */
+  html, body, #canvas {
+    width: 100% !important;
+    height: 100% !important;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #000;
+  }
+
+  /* Overlay that prompts the player to turn their phone */
+  #rotate-device-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: #000000;
+    color: #ffffff;
+    z-index: 999999;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  }
+
+  /* Automatically show overlay when the iPhone is held vertically */
+  @media screen and (orientation: portrait) {
+    #rotate-device-overlay {
+      display: flex;
+    }
+  }
+</style>
+
+
+
 <script>
       // Global object to store orientation values so Godot can read them
       window.deviceOrientationData = {
@@ -100,6 +139,15 @@ body {
         gamma: 0,
         granted: false
       };
+
+	  // 1. Force web page into full screen mode on user tap
+      var el = document.documentElement;
+      if (el.requestFullscreen) {
+        el.requestFullscreen().catch(function(e){});
+      } else if (el.webkitRequestFullscreen) { /* iOS Safari support */
+       el.webkitRequestFullscreen();
+      }
+
 
       function requestiOSOrientationPermission() {
         if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
@@ -143,7 +191,7 @@ body {
 
 		<script src="IphoneVR.js"></script>
 		<script>
-const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"IphoneVR","experimentalVK":false,"fileSizes":{"IphoneVR.pck":40060,"IphoneVR.wasm":35740641},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
+const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"IphoneVR","experimentalVK":false,"fileSizes":{"IphoneVR.pck":40220,"IphoneVR.wasm":35740641},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
 const GODOT_THREADS_ENABLED = false;
 const engine = new Engine(GODOT_CONFIG);
 
