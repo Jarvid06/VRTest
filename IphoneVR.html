@@ -174,24 +174,6 @@ body {
         window.deviceOrientationData.alpha = event.alpha || 0;
         window.deviceOrientationData.beta = event.beta || 0;
         window.deviceOrientationData.gamma = event.gamma || 0;
-		
-	    // Convert degrees to radians for math
-        var radB = beta * (Math.PI / 180);
-        var radG = gamma * (Math.PI / 180);
-    
-        // LANDSCAPE LEFT: Calculate true pitch using atan2 to bypass the 90-degree gamma limit
-        // atan2(y, x) computes smooth angles through all 4 quadrants (-180 to 180)
-        var truePitch = Math.atan2(Math.sin(radG), Math.sin(radB));
-        var trueRoll  = Math.atan2(Math.sin(radB), Math.cos(radG));
-
-
-	    window.deviceOrientationData.alpha = alpha;
-        window.deviceOrientationData.beta  = beta;
-        window.deviceOrientationData.gamma = gamma;
-        
-        // Store continuous radians
-        window.deviceOrientationData.pitch = truePitch;
-        window.deviceOrientationData.roll  = trueRoll;
       }
     </script>
 	</head>
