@@ -137,8 +137,11 @@ body {
         alpha: 0,
         beta: 0,
         gamma: 0,
+		pitch: 0,
+		roll: 0,
         granted: false
       };
+
 
 	  // 1. Force web page into full screen mode on user tap
       var el = document.documentElement;
@@ -171,6 +174,24 @@ body {
         window.deviceOrientationData.alpha = event.alpha || 0;
         window.deviceOrientationData.beta = event.beta || 0;
         window.deviceOrientationData.gamma = event.gamma || 0;
+		
+	    // Convert degrees to radians for math
+        var radB = beta * (Math.PI / 180);
+        var radG = gamma * (Math.PI / 180);
+    
+        // LANDSCAPE LEFT: Calculate true pitch using atan2 to bypass the 90-degree gamma limit
+        // atan2(y, x) computes smooth angles through all 4 quadrants (-180 to 180)
+        var truePitch = Math.atan2(Math.sin(radG), Math.sin(radB));
+        var trueRoll  = Math.atan2(Math.sin(radB), Math.cos(radG));
+
+
+	    window.deviceOrientationData.alpha = alpha;
+        window.deviceOrientationData.beta  = beta;
+        window.deviceOrientationData.gamma = gamma;
+        
+        // Store continuous radians
+        window.deviceOrientationData.pitch = truePitch;
+        window.deviceOrientationData.roll  = trueRoll;
       }
     </script>
 	</head>
@@ -191,7 +212,7 @@ body {
 
 		<script src="IphoneVR.js"></script>
 		<script>
-const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"IphoneVR","experimentalVK":false,"fileSizes":{"IphoneVR.pck":41740,"IphoneVR.wasm":35740641},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
+const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"IphoneVR","experimentalVK":false,"fileSizes":{"IphoneVR.pck":41548,"IphoneVR.wasm":35740641},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
 const GODOT_THREADS_ENABLED = false;
 const engine = new Engine(GODOT_CONFIG);
 
